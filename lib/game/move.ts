@@ -21,7 +21,7 @@ export const movement = z
     const toX = toMatch[1].charCodeAt(0) - "a".charCodeAt(0);
     const toY = parseInt(toMatch[2], 10) - 1;
 
-    return { from: [fromX, fromY], to: [toX, toY] };
+    return { from: [fromX, fromY], to: [toX, toY], toString: () => s };
   })
   .describe(
     "A movement from one square to another split by a ':'.\n" +

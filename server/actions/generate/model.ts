@@ -47,7 +47,7 @@ export class LanguageModel<
 
   async infer(input: Input): Promise<OpenAIOutput> {
     const config = this.configure(input);
-    console.log("here's the config", config);
+    console.log("here's the config", JSON.stringify(config, null, 2));
     const res = await openAI(config);
     return OpenAIStream(res);
   }
@@ -78,8 +78,9 @@ export const SmartLanguage = language(
     request: z.string(),
     board: z.string(),
     turn: z.string(),
+    history: z.string().array(),
   }),
-  ({ request, board, turn }) => ({
+  ({ request, board, turn, history }) => ({
     model: "gpt-4-0125-preview",
     messages: [
       {
@@ -87,13 +88,20 @@ export const SmartLanguage = language(
         content:
           "You are responsible for formatting a user's requested chess move into a valid move, " +
           turn +
-          " to play." +
+          " to play. White is uppercase letters, black is lowercase. You must ALWAYS use this special notation. Do not use normal chess notation. You have to specify the square you're moving from, and the square you're moving to, even if you're taking a queen or a king -- same notation no matter what." +
+          "P = pawn\nR = rook\nN = knight\nB = bishop\nQ = queen\nK = king\n" +
+          "Note that in this version of chess, you can make as many moves as you want simultaneously. " +
+          "Sometimes the user will say something like 'take that pawn' -- you should infer their intention if not" +
+          " spelled out explicitly, and then do that. Don't reply as text, be sure to only use your tools. " +
           "The board is currently in the following state: \n\n" +
-          board,
+          board +
+          " \n\n" +
+          "Move history (most recent first): \n" +
+          history.reverse().join("\n"),
       },
       {
         role: "user",
-        content: request,
+        content: "Request from player " + turn + ": " + request,
       },
     ],
     stream: true,

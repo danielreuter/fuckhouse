@@ -1,22 +1,42 @@
 import z from "@/packages/mod";
 import { Player, player } from "./player";
-import { BoardState, board } from "./board";
 import { Move } from "./move";
 import { Piece, p } from "./piece";
+import { BoardState, board } from "./board";
 
 const { Rook, Knight, Bishop, Queen, King, Pawn } = p;
 
 export const engine = z
   .object({
     board: board,
+    history: z.array(z.string()),
+    winner: player.optional(),
   })
   .interpret<{
     move: (m: Move) => void;
     fen: () => string;
     ascii: () => string;
     turn: () => Player;
+    history: () => string[];
+    winner: () => Player | undefined;
+    reset: () => void;
   }>(({ _, set }) => ({
     _,
+    reset() {
+      set(({ engine }) => {
+        engine._.board = board.from({
+          turn: "white",
+        });
+        engine._.history = [];
+        engine._.winner = undefined;
+      });
+    },
+    winner() {
+      return this._.winner;
+    },
+    history() {
+      return this._.history;
+    },
     turn() {
       return this._.board.turn;
     },
@@ -30,6 +50,7 @@ export const engine = z
           to: [toX, toY],
         } = movement;
         const piece = board.state[fromX][fromY];
+        const oldPiece = board.state[toX][toY];
         set(({ engine }) => {
           const { board } = engine._;
           board.state[toX][toY] = piece;
@@ -39,6 +60,10 @@ export const engine = z
           } else {
             board.turn = "white";
           }
+          if (oldPiece?.type === "K") {
+            engine._.winner = player;
+          }
+          engine._.history.push(movement.toString());
         });
       } catch (e) {
         console.error(e);
@@ -186,31 +211,20 @@ function getPieceChar(piece: Piece): string {
 }
 
 function getAsciiBoard(board: BoardState): string {
-  const pieceToChar = {
-    P: "P",
-    N: "N",
-    B: "B",
-    R: "R",
-    Q: "Q",
-    K: "K",
-  };
-
   let asciiBoard = "  +---+---+---+---+---+---+---+---+\n";
   // Start from the last row (row 7 in 0-indexed array, which corresponds to the 8th rank in chess)
   for (let y = 7; y >= 0; y--) {
     let row = `${y + 1} |`;
     for (let x = 0; x < 8; x++) {
       const piece = board[x][y];
-      const pieceChar = piece
-        ? piece.player === "white"
-          ? pieceToChar[piece.type]
-          : pieceToChar[piece.type].toLowerCase()
-        : " ";
-      row += ` ${pieceChar} |`;
+      const displayChar = piece
+        ? `${piece.player === "white" ? piece.type.toUpperCase() : piece.type.toLowerCase()} [${x}, ${y}]`
+        : "   ";
+      row += ` ${displayChar} |`;
     }
     asciiBoard += row + "\n";
     asciiBoard += "  +---+---+---+---+---+---+---+---+\n";
   }
-  asciiBoard += "    a   b   c   d   e   f   g   h  \n";
+  asciiBoard += "    a   b   c   d   e   f   g   h\n";
   return asciiBoard;
 }

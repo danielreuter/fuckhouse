@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "ai": "^2.2.37",
@@ -26,6 +28,8 @@
     "openai": "^4.28.4",
     "postgres": "^3.4.3",
     "react": "^18",
+    "react-chessboard": "^4.4.0",
+    "react-confetti-explosion": "^2.1.2",
     "react-dom": "^18",
     "react-expanding-textarea": "^2.3.6",
     "tailwind-merge": "^2.2.1",

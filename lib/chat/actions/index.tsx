@@ -70,15 +70,23 @@ export const createChatActionsStore: StateCreator<
 
   generateMove: async (messages) => {
     const engine = get().engine;
+    const dataSet = new Set<string>();
     actions
       .generate({
         request: messages[messages.length - 1].content,
         board: engine.ascii(),
         turn: engine.turn(),
+        history: engine.history(),
       })
       .then((result) => {
         readPromiseStream(move, result, (data) => {
           console.warn("success");
+          const moveData = data.dump();
+          const moveString = moveData.movement.toString();
+          if (dataSet.has(moveString)) {
+            return;
+          }
+          dataSet.add(moveString);
           console.warn(data);
           engine.move(data.dump());
         });

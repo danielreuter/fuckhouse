@@ -27,6 +27,7 @@ export const runInference = action(
     request: z.string(),
     board: z.string(),
     turn: z.string(),
+    history: z.string().array(),
   }),
   async (input) => {
     const model = SmartLanguage;

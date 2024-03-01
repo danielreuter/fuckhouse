@@ -1,7 +1,8 @@
 import z from "@/packages/mod";
 import { Player, player } from "./player";
+// import Chesspieces from "@/components/chesspieces/standard";
 import { BoardState } from "./board";
-import Chesspieces from "@/components/chesspieces/standard";
+import { defaultPieces } from "@/components/chesspieces/media";
 
 type Coordinate = [number, number];
 
@@ -30,7 +31,7 @@ class Pawn implements PieceBase {
   }
 
   element() {
-    return this.player === "white" ? Chesspieces.wP : Chesspieces.bP;
+    return this.player === "white" ? defaultPieces.wP : defaultPieces.bP;
   }
 
   validateMove({ from, to, player, board }: ValidateMoveArgs): boolean {
@@ -69,7 +70,7 @@ class Knight implements PieceBase {
   }
 
   element() {
-    return this.player === "white" ? Chesspieces.wN : Chesspieces.bN;
+    return this.player === "white" ? defaultPieces.wN : defaultPieces.bN;
   }
 
   validateMove({ from, to, player, board }: ValidateMoveArgs): boolean {
@@ -92,7 +93,7 @@ class Bishop implements PieceBase {
   }
 
   element() {
-    return this.player === "white" ? Chesspieces.wB : Chesspieces.bB;
+    return this.player === "white" ? defaultPieces.wB : defaultPieces.bB;
   }
 
   validateMove({ from, to, player, board }: ValidateMoveArgs): boolean {
@@ -112,7 +113,7 @@ class Rook implements PieceBase {
   }
 
   element() {
-    return this.player === "white" ? Chesspieces.wR : Chesspieces.bR;
+    return this.player === "white" ? defaultPieces.wR : defaultPieces.bR;
   }
 
   validateMove({ from, to, player, board }: ValidateMoveArgs): boolean {
@@ -132,7 +133,7 @@ class Queen implements PieceBase {
   }
 
   element() {
-    return this.player === "white" ? Chesspieces.wQ : Chesspieces.bQ;
+    return this.player === "white" ? defaultPieces.wQ : defaultPieces.bQ;
   }
 
   validateMove({ from, to, player, board }: ValidateMoveArgs): boolean {
@@ -159,7 +160,7 @@ class King implements PieceBase {
   }
 
   element() {
-    return this.player === "white" ? Chesspieces.wK : Chesspieces.bK;
+    return this.player === "white" ? defaultPieces.wK : defaultPieces.bK;
   }
 
   validateMove({ from, to, player, board }: ValidateMoveArgs): boolean {

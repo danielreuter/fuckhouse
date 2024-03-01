@@ -1,4 +1,4 @@
-import { Board } from "@/components/board";
+import { Board } from "@/components/board/board";
 import { Chat } from "@/components/chat/chat";
 
 export default async function Index() {

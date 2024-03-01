@@ -1,8 +1,8 @@
 import z from "@/packages/mod";
-import { Piece, p } from "../piece";
-import { player } from "../player";
-import { useEngine } from "../../store";
-import { Squares } from "./squares";
+import { Piece, p } from "./piece";
+import { player } from "./player";
+import { useEngine } from "../store";
+import { Squares } from "../../components/board/squares";
 
 export type BoardState = (Piece | null)[][];
 
@@ -111,20 +111,4 @@ export const board = z
 
 interface Props {
   state: BoardState;
-}
-
-export function MinimalBoard({ state }: Props) {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Squares boardState={state} />
-    </div>
-  );
 }

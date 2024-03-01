@@ -26,6 +26,7 @@ export const useStore = create<Store>()((...a) => {
       board: {
         turn: "white",
       },
+      history: [],
     },
     { set },
   );
